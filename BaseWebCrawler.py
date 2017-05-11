@@ -57,8 +57,8 @@ class BaseWebCrawler(threading.Thread):
 
                 keyFieldValue=self.paramsDicArray[idx][self.keyFieldName]
                 #print('gggg:'+str(self.headers))
-                sleepTime=random.uniform(3, 5)
-                time.sleep(1)
+                sleepTime=random.randint(1, 10)
+                time.sleep(sleepTime)
                 try:
                     if self.sessionOn and self.isGet:
                         c=self.session.get(self.url, headers=self.headers, params=self.paramsDicArray[idx], timeout=self.timeout)
@@ -81,17 +81,30 @@ class BaseWebCrawler(threading.Thread):
                         else:
                             #print(c.text)
                             # outputFilePtr.write(keyFieldValue+','+c.text)
+                            #print(c.text)
                             page=etree.HTML(c.text)
-                            t=page.xpath(u"//div[contains(@class, 'panel-heading companyName')]/a[contains(@class,'hover')]/descendant::text()")
-                            restContent=''.join(page.xpath(u"//div[contains(@class, 'panel panel-default')]/div[contains(@class,'panel-body')]/descendant::text()")).replace('詳細資料','').replace('\t','').replace('\n','').replace('\xa0','')
+                            t=page.xpath(u"//div[contains(@class, 'panel-heading companyName')]/a[contains(@class,'hover')]/descendant::text()")[0]
+                            restContent=''.join(page.xpath(u"//div[contains(@class, 'panel panel-default')]/div[contains(@class,'panel-body')]/descendant::text()")).replace('\t','').replace('\n','').replace('\xa0','')
                             restContentArray=restContent.split(',')
+                            # last Element:'詳細資料'
                             tmpResultArray=[]
                             cidx=0
-                            for cidx in range(0, len(restContentArray)):
+                            stopInput=False
+                            #print(restContentArray)
+                            while cidx < len(restContentArray) and stopInput==False:
                                 #print(restContentArray[cidx])
-                                tmpResultArray.append(restContentArray[cidx].split(':')[1].strip())
+
+                                tmpStrArr=restContentArray[cidx].split(':')
                                 
-                            outputFilePtr.write(keyFieldValue+','+str(t[0])+','+','.join(tmpResultArray)+'\n')
+                                
+                                if '詳細資料' in tmpStrArr[1]:
+                                    stopInput=True
+                                    tmpResultArray.append(tmpStrArr[1].split('詳細資料')[0].strip())
+                                else:
+                                    tmpResultArray.append(tmpStrArr[1].strip())
+                                cidx+=1
+                                
+                            outputFilePtr.write(keyFieldValue+','+str(t)+','+','.join(tmpResultArray)+'\n')
                     else:
                         if self.outputFile  == None:
                             self.content[keyFieldValue]=None
