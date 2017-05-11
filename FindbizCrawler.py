@@ -41,9 +41,9 @@ class FindbizCrawler():
         self.url='http://findbiz.nat.gov.tw/fts/query/QueryList/queryList.do'
         self.headers={'Referer':self.url}
         self.keyFieldName='qryCond'
-        self.payload={'userResp': '', 'qryType': ['cmpyType', 'brCmpyType', 'busmType', 'factType', 'lmtdType'], 
-        'busmType': 'true', 'lmtdType': 'true', 'infoAddr': 'true', 'infoDefault': 'true', 'cmpyType': 'true', 
-        'infoType': ['infoDefault', 'infoAddr'], 'factType': 'true', 'validatorOpen': 'N', 'isAlive': 'all', 
+        self.payload={'userResp': '', 'qryType': ['cmpyType', 'brCmpyType', 'busmType', ], 
+        'busmType': 'true',  'infoDefault': 'true', 'cmpyType': 'true', 
+        'infoType': ['infoDefault'], 'validatorOpen': 'N', 'isAlive': 'true', 
         'qryCond': 'qryCond', 'cPage': '', 'errorMsg': '', 'brCmpyType': 'true', 'rlPermit': '0'}
 
         self.contents=[]
@@ -54,9 +54,6 @@ class FindbizCrawler():
         threads=[]
         today=datetime.now().strftime("%Y%m%d%H%M%S")
         
-        # ['大川鋼鋁工程行']=page.xpath(u"//div[contains(@class, 'panel-heading companyName')]/a[contains(@class,'hover')]/descendant::text()")
-        # 
-
         print('Start to process the file: '+ self.sourceFileName+' and output folder:'+self.outputFileFolder)
         try:
 
