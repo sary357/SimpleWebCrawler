@@ -4,7 +4,7 @@
 商工登記公示資料
 URL: http://findbiz.nat.gov.tw/fts/query/QueryList/queryList.do
 
-P.S: encodoing in env must be UTF-8
+P.S: encooding in env must be UTF-8
 """
 
 #from abc import ABCMeta, abstractmethod

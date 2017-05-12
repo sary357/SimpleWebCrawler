@@ -3,7 +3,7 @@
 """
 base class of web crawler
 
-P.S: encodoing in env must be UTF-8
+P.S: encooding in env must be UTF-8
 """
 
 

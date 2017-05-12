@@ -49,6 +49,13 @@ def get8DigitCompanyId(company_id):
         bao="0"*(8-len(bao))+bao
     return bao
 
+def get2DigitMonthOrDate(monthOrDay):
+    bao=monthOrDay
+    bao=bao.strip().replace('\ufeff','')
+    if len(bao) <2:
+        bao="0"*(2-len(bao))+bao
+    return bao
+
 def getTotalLineNumOfFile(fileName):
     try:
         num_lines = sum(1 for line in open(fileName))
