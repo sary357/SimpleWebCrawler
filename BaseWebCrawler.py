@@ -42,6 +42,8 @@ class BaseWebCrawler(threading.Thread):
         if self.sessionOn:
             self.session.close()
     def run(self):
+        errorFileName=self.outputFile+'_err'
+        errorFile=open(errorFileName, mode='w')
         self.content={}
         idx=0
         totalLineNumOfFile=len(self.paramsDicArray)
@@ -74,7 +76,8 @@ class BaseWebCrawler(threading.Thread):
                     print('headers:',self.headers)
                     print('params:', self.paramsDicArray[idx])
                     traceback.print_exc()
-                finally:
+                    errorFile.write(keyFieldValue)
+                try:
                     if c != None:
                         if self.outputFile  == None:
                             self.content[keyFieldValue]=c.text
@@ -110,7 +113,13 @@ class BaseWebCrawler(threading.Thread):
                             self.content[keyFieldValue]=None
                         else:
                             outputFilePtr.write(keyFieldValue+','+'\n')
-                   #print(self.content[keyFieldValue])
+                       #print(self.content[keyFieldValue])
+                except Exception as e:
+                    print('url:',self.url)
+                    print('headers:',self.headers)
+                    print('params:', self.paramsDicArray[idx])
+                    traceback.print_exc()
+                    errorFile.write(keyFieldValue)
         else:
             try:
                 if self.sessionOn and self.isGet:
@@ -125,9 +134,9 @@ class BaseWebCrawler(threading.Thread):
             except Exception as e:
                 print('url:',url)
                 print('headers:',headers)
-
                 traceback.print_exc()
-            finally:
+                errorFile.write(self.headers)
+            try:
                 if c != None:
                     if self.outputFile  == None:
                         self.content[keyFieldValue]=c.text
@@ -149,6 +158,11 @@ class BaseWebCrawler(threading.Thread):
                         self.content[keyFieldValue]=None
                     else:
                         outputFilePtr.write(keyFieldValue+','+'\n')
+            except Exception as e:
+                    print('url:',self.url)
+                    print('headers:',self.headers)
+                    errorFile.write(self.headers)
+                    traceback.print_exc()
         self.closeSession()
         if self.outputFile != None:
             print('Dump the result to file: '+ self.outputFile)
