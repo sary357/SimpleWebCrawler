@@ -51,7 +51,7 @@ class RonnyGovDataCrawler:
                 try:
                     r=requests.get(self.url+'/'+company_id)
                     jsonOutput=r.json()
-                    #print(jsonOutput)
+                    print(jsonOutput)
                     print('Processing records: '+str(idx)+'/Total records: '+str(totalLines))
                     if 'data' in jsonOutput:
                         if '公司狀況' in jsonOutput['data']:
@@ -69,9 +69,9 @@ class RonnyGovDataCrawler:
                             company_addr=jsonOutput['data']['公司所在地']
                         if '登記機關' in jsonOutput['data']:
                             registry_unit=jsonOutput['data']['登記機關']
-                        if '核准設立日期' in jsonOutput['data']:
+                        if '核准設立日期' in jsonOutput['data'] and jsonOutput['data']['核准設立日期' ]!=None:
                             registry_date=str(jsonOutput['data']['核准設立日期']['year'])+get2DigitMonthOrDate(str(jsonOutput['data']['核准設立日期']['month']))+get2DigitMonthOrDate(str(jsonOutput['data']['核准設立日期']['day']))
-                        if '最後核准變更日期' in jsonOutput['data']:
+                        if '最後核准變更日期' in jsonOutput['data'] and jsonOutput['data']['最後核准變更日期' ]!=None:
                             change_date=str(jsonOutput['data']['最後核准變更日期']['year'])+get2DigitMonthOrDate(str(jsonOutput['data']['最後核准變更日期']['month']))+get2DigitMonthOrDate(str(jsonOutput['data']['最後核准變更日期']['day']))
                         
                         if '商業名稱' in jsonOutput['data']:
@@ -85,7 +85,7 @@ class RonnyGovDataCrawler:
                             company_respnsible_person=jsonOutput['data']['負責人姓名']
                         if '地址' in jsonOutput['data']:
                             company_addr=jsonOutput['data']['地址']
-                        if '最近異動日期' in jsonOutput['data']:
+                        if '最近異動日期' in jsonOutput['data'] and jsonOutput['data']['最近異動日期' ]!=None:
                             change_date=str(jsonOutput['data']['最近異動日期']['year'])+get2DigitMonthOrDate(str(jsonOutput['data']['最近異動日期']['month']))+get2DigitMonthOrDate(str(jsonOutput['data']['最近異動日期']['day']))
                         outputFile.write(line.strip()+','+company_status+','+company_name+','+company_type+','
                             +company_capital+','+company_real_capital+','+company_respnsible_person+','+company_addr+','+registry_unit+','+registry_date+','+change_date+'\n')
@@ -112,7 +112,7 @@ class RonnyGovDataCrawler:
 
 if __name__ == '__main__':
    # sys.stdout = TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    inputFileName='/Users/sary357/Downloads/work.csv'
+    inputFileName='/Users/sary357/Downloads/work1.csv'
     outputFileName='/Users/sary357/Downloads/work_output.csv'
     url='http://company.g0v.ronny.tw/api/show'
     today=datetime.now()
