@@ -166,6 +166,7 @@ class BaseWebCrawler(threading.Thread):
         self.closeSession()
         if self.outputFile != None:
             print('Dump the result to file: '+ self.outputFile)
+        errorFile.close()
 
     def getContent(self):
         #print(self.content)
