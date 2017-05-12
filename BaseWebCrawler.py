@@ -76,7 +76,7 @@ class BaseWebCrawler(threading.Thread):
                     print('headers:',self.headers)
                     print('params:', self.paramsDicArray[idx])
                     traceback.print_exc()
-                    errorFile.write(keyFieldValue)
+                    errorFile.write(keyFieldValue+',1'+'\n')
                 try:
                     if c != None:
                         if self.outputFile  == None:
@@ -119,7 +119,7 @@ class BaseWebCrawler(threading.Thread):
                     print('headers:',self.headers)
                     print('params:', self.paramsDicArray[idx])
                     traceback.print_exc()
-                    errorFile.write(keyFieldValue)
+                    errorFile.write(keyFieldValue+',2'+'\n')
         else:
             try:
                 if self.sessionOn and self.isGet:
