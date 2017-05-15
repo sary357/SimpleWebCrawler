@@ -57,7 +57,14 @@ class RonnyGovDataCrawler:
                         if '公司狀況' in jsonOutput['data']:
                             company_status=jsonOutput['data']['公司狀況']
                         if '公司名稱' in jsonOutput['data']:
-                            company_name=jsonOutput['data']['公司名稱']
+                            #print(jsonOutput['data']['公司名稱'])
+                            if type(jsonOutput['data']['公司名稱']) is str:
+                                company_name=jsonOutput['data']['公司名稱'].strip()
+                            elif type(jsonOutput['data']['公司名稱'][0]) is str:
+                                company_name=jsonOutput['data']['公司名稱'][0].strip()
+                            else:
+                                company_name=jsonOutput['data']['公司名稱'][0][0].strip()
+                           # print(company_name)
                             company_type='公司'
                         if '資本總額(元)' in jsonOutput['data']:
                             company_capital=jsonOutput['data']['資本總額(元)'].replace(',','')
@@ -65,8 +72,17 @@ class RonnyGovDataCrawler:
                             company_real_capital=jsonOutput['data']['實收資本額(元)'].replace(',','')
                         if '代表人姓名' in jsonOutput['data']:
                             company_respnsible_person=jsonOutput['data']['代表人姓名']
+                        elif '訴訟及非訴訟代理人姓名' in jsonOutput['data']:
+                            if type(jsonOutput['data']['訴訟及非訴訟代理人姓名']) is str:
+                                company_respnsible_person=jsonOutput['data']['訴訟及非訴訟代理人姓名']
+                            else:
+                                company_respnsible_person=jsonOutput['data']['訴訟及非訴訟代理人姓名'][0]
                         if '公司所在地' in jsonOutput['data']:
                             company_addr=jsonOutput['data']['公司所在地']
+                        elif '分公司所在地' in jsonOutput['data']:
+                            company_addr=jsonOutput['data']['分公司所在地'].strip()
+                            company_type='分公司'
+
                         if '登記機關' in jsonOutput['data']:
                             registry_unit=jsonOutput['data']['登記機關']
                         if '核准設立日期' in jsonOutput['data'] and jsonOutput['data']['核准設立日期' ]!=None:
@@ -87,8 +103,25 @@ class RonnyGovDataCrawler:
                             company_addr=jsonOutput['data']['地址']
                         if '最近異動日期' in jsonOutput['data'] and jsonOutput['data']['最近異動日期' ]!=None:
                             change_date=str(jsonOutput['data']['最近異動日期']['year'])+get2DigitMonthOrDate(str(jsonOutput['data']['最近異動日期']['month']))+get2DigitMonthOrDate(str(jsonOutput['data']['最近異動日期']['day']))
+                        
+                        # print(company_status) # 公司狀況
+                        # print(company_name)   # 公司名稱
+                        # print(company_capital) # 資本總額(元)
+                        # print(company_real_capital) #實收資本額(元)
+                        # print(company_respnsible_person)  # 代表人(負責人)姓名
+                        # print(company_addr) # 公司所在地
+                        # print(registry_unit) # 登記機關
+                        # print(registry_date) # 核准設立日期
+                        # print(change_date) # 最後核准變更日期
+                        # print(company_type)
                         outputFile.write(line.strip()+','+company_status+','+company_name+','+company_type+','
-                            +company_capital+','+company_real_capital+','+company_respnsible_person+','+company_addr+','+registry_unit+','+registry_date+','+change_date+'\n')
+                            +company_capital+','+
+                            company_real_capital+','+
+                            company_respnsible_person+','
+                            +company_addr+','+
+                            registry_unit+','+
+                            registry_date+','+
+                            change_date+'\n')
                         successCount+=1
                     else:
                         errorFile.write(company_id+',2'+'\n') 
@@ -112,7 +145,7 @@ class RonnyGovDataCrawler:
 
 if __name__ == '__main__':
    # sys.stdout = TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    inputFileName='/Users/sary357/Downloads/work1.csv'
+    inputFileName='/Users/sary357/Downloads/work.csv'
     outputFileName='/Users/sary357/Downloads/work_output.csv'
     url='http://company.g0v.ronny.tw/api/show'
     today=datetime.now()
