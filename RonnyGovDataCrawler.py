@@ -84,11 +84,11 @@ class RonnyGovDataCrawler:
                                 company_respnsible_person=jsonOutput['data']['訴訟及非訴訟代理人姓名']
                             else:
                                 company_respnsible_person=jsonOutput['data']['訴訟及非訴訟代理人姓名'][0]
-                        elif '分公司經理姓名' in jsonOutput['data']:
-                            if type(jsonOutput['data']['分公司經理姓名']) is str:
-                                company_respnsible_person=jsonOutput['data']['分公司經理姓名']
-                            else:
-                                company_respnsible_person=jsonOutput['data']['分公司經理姓名'][0]
+                       # elif '分公司經理姓名' in jsonOutput['data']:
+                       #     if type(jsonOutput['data']['分公司經理姓名']) is str:
+                       #         company_respnsible_person=jsonOutput['data']['分公司經理姓名']
+                       #     else:
+                       #         company_respnsible_person=jsonOutput['data']['分公司經理姓名'][0]
                         if '公司所在地' in jsonOutput['data']:
                             company_addr=jsonOutput['data']['公司所在地']
                         elif '分公司所在地' in jsonOutput['data']:
