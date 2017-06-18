@@ -56,6 +56,8 @@ class RonnyGovDataCrawler:
                     if 'data' in jsonOutput:
                         if '公司狀況' in jsonOutput['data']:
                             company_status=jsonOutput['data']['公司狀況']
+                        elif '分公司狀況' in jsonOutput['data']:
+                            company_status=jsonOutput['data']['分公司狀況']
                         if '公司名稱' in jsonOutput['data']:
                             #print(jsonOutput['data']['公司名稱'])
                             if type(jsonOutput['data']['公司名稱']) is str:
@@ -66,6 +68,11 @@ class RonnyGovDataCrawler:
                                 company_name=jsonOutput['data']['公司名稱'][0][0].strip()
                            # print(company_name)
                             company_type='公司'
+                        elif '分公司名稱' in jsonOutput['data'] and '財政部' in jsonOutput['data'] and '營業人名稱' in jsonOutput['data']['財政部']:
+                            #print(jsonOutput['data']['公司名稱'])
+                            company_name=jsonOutput['data']['財政部']['營業人名稱'].strip()
+                           # print(company_name)
+                            company_type='分公司'
                         if '資本總額(元)' in jsonOutput['data']:
                             company_capital=jsonOutput['data']['資本總額(元)'].replace(',','')
                         if '實收資本額(元)' in jsonOutput['data']:
@@ -77,6 +84,11 @@ class RonnyGovDataCrawler:
                                 company_respnsible_person=jsonOutput['data']['訴訟及非訴訟代理人姓名']
                             else:
                                 company_respnsible_person=jsonOutput['data']['訴訟及非訴訟代理人姓名'][0]
+                       # elif '分公司經理姓名' in jsonOutput['data']:
+                       #     if type(jsonOutput['data']['分公司經理姓名']) is str:
+                       #         company_respnsible_person=jsonOutput['data']['分公司經理姓名']
+                       #     else:
+                       #         company_respnsible_person=jsonOutput['data']['分公司經理姓名'][0]
                         if '公司所在地' in jsonOutput['data']:
                             company_addr=jsonOutput['data']['公司所在地']
                         elif '分公司所在地' in jsonOutput['data']:
@@ -145,8 +157,10 @@ class RonnyGovDataCrawler:
 
 if __name__ == '__main__':
    # sys.stdout = TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-    inputFileName='/Users/sary357/Downloads/work.csv'
-    outputFileName='/Users/sary357/Downloads/work_output.csv'
+   # inputFileName='/Users/sary357/Downloads/work.csv'
+   # inputFileName='D:/fuming.Tsai/Documents/Tools/PortableGit/projects/GitDocs/06-專案文件/05-SME授信客戶資金需求/parse_again.txt'
+   # outputFileName='/Users/sary357/Downloads/work_output.csv'
+   # outputFileName='D:/fuming.Tsai/Documents/Tools/PortableGit/projects/GitDocs/06-專案文件/05-SME授信客戶資金需求/id_out.csv'
     url='http://company.g0v.ronny.tw/api/show'
     today=datetime.now()
     
