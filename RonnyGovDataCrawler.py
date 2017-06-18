@@ -51,7 +51,7 @@ class RonnyGovDataCrawler:
                 try:
                     r=requests.get(self.url+'/'+company_id)
                     jsonOutput=r.json()
-                    print(jsonOutput)
+                    #print(jsonOutput)
                     print('Processing records: '+str(idx)+'/Total records: '+str(totalLines))
                     if 'data' in jsonOutput:
                         if '公司狀況' in jsonOutput['data']:
@@ -114,14 +114,14 @@ class RonnyGovDataCrawler:
                         # print(registry_date) # 核准設立日期
                         # print(change_date) # 最後核准變更日期
                         # print(company_type)
-                        outputFile.write(line.strip()+','+company_status+','+company_name+','+company_type+','
-                            +company_capital+','+
-                            company_real_capital+','+
-                            company_respnsible_person+','
-                            +company_addr+','+
-                            registry_unit+','+
-                            registry_date+','+
-                            change_date+'\n')
+                        outputFile.write('"'+line.strip()+'","'+company_status+'","'+company_name+'","'+company_type+'","'
+                            +company_capital+'","'+
+                            company_real_capital+'","'+
+                            company_respnsible_person+'","'
+                            +company_addr+'","'+
+                            registry_unit+'","'+
+                            registry_date+'","'+
+                            change_date+'"'+'\n')
                         successCount+=1
                     else:
                         errorFile.write(company_id+',2'+'\n') 
@@ -153,9 +153,15 @@ if __name__ == '__main__':
     fmt = '%Y-%m-%d %H:%M:%S'
     print('Starting time: '+ today.strftime(fmt))
 
-    crawler=RonnyGovDataCrawler(url,inputFileName, outputFileName)
-    crawler.parse()
 
+    if len(sys.argv) < 3:
+        print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE' )
+    else:
+        print("Start to Process...")
+        inputFileName=sys.argv[1]
+        outputFileName=sys.argv[2]
+        crawler=RonnyGovDataCrawler(url,inputFileName, outputFileName)
+        crawler.parse()
     today=datetime.now()
     print('End time: '+ today.strftime(fmt))
 
