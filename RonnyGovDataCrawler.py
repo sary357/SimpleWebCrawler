@@ -33,7 +33,7 @@ class RonnyGovDataCrawler:
             tmpFile=open(self.outputFileName+'_tmp', mode='w',encoding='UTF-8')
             for line in inputFile:
                 if idx == 0:
-                    idx=idx+1
+                    idx=1
                 else:
                     tmpFile.write(line)
             self.inputFileName=self.outputFileName+'_tmp'
@@ -45,10 +45,14 @@ class RonnyGovDataCrawler:
             tmpFile.close()
             
         
-    def parse(self, skip1stLine=True, delimiter=None, idFieldNo=0):
+    def parse(self, skip1stLine=False, delimiter=None, idFieldNo=0):
         totalLines=getTotalLineNumOfFile(self.inputFileName)
         successCount=0
         idx=0
+        
+        if skip1stLine:
+            __skip_1_line(self)
+        
         try: 
             inputFile=open(self.inputFileName, mode='r', encoding='UTF-8')
             outputFile=open(self.outputFileName, mode='w',encoding='UTF-8')
@@ -193,8 +197,12 @@ if __name__ == '__main__':
 
     if len(sys.argv) < 3:
         print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE' )
+        print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE skip1stLine=[true|false] ' )
+        print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE skip1stLine=[true|false] delimiter="," idFieldNo=0 ' )
     else:
+        # (self, skip1stLine=False, delimiter=None, idFieldNo=0)
         print("Start to Process...")
+        
         inputFileName=sys.argv[1]
         outputFileName=sys.argv[2]
         crawler=RonnyGovDataCrawler(url,inputFileName, outputFileName)
