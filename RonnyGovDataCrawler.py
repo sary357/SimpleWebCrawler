@@ -26,7 +26,26 @@ class RonnyGovDataCrawler:
         self.inputFileName=inputFileName
         self.outputFileName=outputFileName
         self.url=url
-    def parse(self):
+    def __skip_1_line(self):
+        idx=0
+        try:
+            inputFile=open(self.inputFileName, mode='r', encoding='UTF-8')
+            tmpFile=open(self.outputFileName+'_tmp', mode='w',encoding='UTF-8')
+            for line in inputFile:
+                if idx == 0:
+                    idx=idx+1
+                else:
+                    tmpFile.write(line)
+            self.inputFileName=self.outputFileName+'_tmp'
+        except IOError as e:
+            traceback.print_exc()   
+        finally:
+            print('Skip the 1st line')
+            inputFile.close()
+            tmpFile.close()
+            
+        
+    def parse(self, skip1stLine=True, delimiter=None, idFieldNo=0):
         totalLines=getTotalLineNumOfFile(self.inputFileName)
         successCount=0
         idx=0
@@ -47,7 +66,11 @@ class RonnyGovDataCrawler:
                 change_date='' # 最後核准變更日期
                 company_type=''
 
-                company_id=get8DigitCompanyId(line.strip())
+                if delimiter == None:
+                    company_id=get8DigitCompanyId(line.strip())
+                else:
+                    company_id=line.split(delimiter)[idFieldNo]
+                    
                 try:
                     r=requests.get(self.url+'/'+company_id)
                     jsonOutput=r.json()
