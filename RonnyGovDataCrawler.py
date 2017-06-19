@@ -51,7 +51,7 @@ class RonnyGovDataCrawler:
         idx=0
         
         if skip1stLine:
-            __skip_1_line(self)
+            self.__skip_1_line()
         
         try: 
             inputFile=open(self.inputFileName, mode='r', encoding='UTF-8')
@@ -153,7 +153,7 @@ class RonnyGovDataCrawler:
                         # print(registry_date) # 核准設立日期
                         # print(change_date) # 最後核准變更日期
                         # print(company_type)
-                        outputFile.write('"'+line.strip()+'","'+company_status+'","'+company_name+'","'+company_type+'","'
+                        outputFile.write('"'+company_id+'","'+company_status+'","'+company_name+'","'+company_type+'","'
                             +company_capital+'","'+
                             company_real_capital+'","'+
                             company_respnsible_person+'","'
@@ -181,7 +181,8 @@ class RonnyGovDataCrawler:
             outputFile.close()
             errorFile.close()
 
-
+def str2bool(v):
+    return v.lower() in ("YES, ""yes", "true", "t", "1", "True", "TRUE")
 if __name__ == '__main__':
    # sys.stdout = TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
    # inputFileName='/Users/sary357/Downloads/work.csv'
@@ -197,8 +198,8 @@ if __name__ == '__main__':
 
     if len(sys.argv) < 3:
         print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE' )
-        print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE skip1stLine=[true|false] ' )
-        print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE skip1stLine=[true|false] delimiter="," idFieldNo=0 ' )
+        print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE [true|false] ' )
+        print(sys.argv[0] + ' INPUT_FILE OUTPUT_FILE [true|false] "," 0 ' )
     else:
         # (self, skip1stLine=False, delimiter=None, idFieldNo=0)
         print("Start to Process...")
@@ -206,7 +207,16 @@ if __name__ == '__main__':
         inputFileName=sys.argv[1]
         outputFileName=sys.argv[2]
         crawler=RonnyGovDataCrawler(url,inputFileName, outputFileName)
-        crawler.parse()
+        if len(sys.argv) == 3:
+            crawler.parse()
+        else:
+            skipOrNot=str2bool(sys.argv[3])
+            delimiter=None
+            fieldNo=0
+            if len(sys.argv) >=5:
+                delimiter=sys.argv[4]
+                fieldNo=int(sys.argv[5])
+            crawler.parse(skipOrNot, delimiter, fieldNo)
     today=datetime.now()
     print('End time: '+ today.strftime(fmt))
 
